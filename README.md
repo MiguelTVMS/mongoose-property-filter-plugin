@@ -28,7 +28,7 @@ You can configure the toJSON and toObject methods output properties filter from 
 
 |    Property   |            Type           |             Default             |                                                                         Description                                                                        |
 |:-------------:|:-------------------------:|:-------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| **hide**          | Regexp  String   [String] | /(_\|deleted\|created\|updated).\*/ | Fields to be removed from the schema. |
+| **hide**          | Regexp, String, [String] | /(_\|deleted\|created\|updated).\*/ | Fields to be removed from the schema. |
 | **showVirtuals**  |            Bool           |               true              | Force virtual fields to be shown.                                                                                                                          |
 | **versionKey**    |            Bool           |              false              | Show the version key from the schema.                                                                                                                      |
 | **_id**           |            Bool           |              false              | Show the _id field from the schema.                                                                                                                        |
