@@ -4,7 +4,7 @@
     "description": "Express plugin to easily remove desired properties from the the schema object.",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "tests/index.js"
     },
     "author": "João Miguel",
     "license": "GPL-3.0",
@@ -23,5 +23,8 @@
         "filter",
         "model",
         "plugin"
-    ]
+    ],
+    "devDependencies": {
+        "express": "^4.15.3"
+    }
 }
