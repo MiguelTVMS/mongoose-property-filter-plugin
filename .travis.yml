@@ -1,0 +1,11 @@
+sudo: required
+
+language: node_js
+
+node_js:
+  - "6.10"
+  - "7.10"
+
+env:
+#  - NODE_ENV=release
+#  - NODE_DEBUG=gitcapsule NODE_ENV=development
