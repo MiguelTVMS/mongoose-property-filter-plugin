@@ -1,6 +1,6 @@
 {
     "name": "express-property-filter-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Express plugin to easily remove desired properties from the the schema object.",
     "main": "index.js",
     "scripts": {
@@ -10,12 +10,12 @@
     "license": "GPL-3.0",
     "repository": {
         "type": "git",
-        "url": "https://github.com/jmtvms/express-property-filter.git"
+        "url": "https://github.com/jmtvms/express-property-filter-plugin.git"
     },
     "bugs": {
-        "url": "https://github.com/jmtvms/express-property-filter/issues"
+        "url": "https://github.com/jmtvms/express-property-filter-plugin/issues"
     },
-    "homepage": "https://github.com/jmtvms/express-property-filter",
+    "homepage": "https://github.com/jmtvms/express-property-filter-plugin",
     "keywords": [
         "mongoose",
         "schema",
