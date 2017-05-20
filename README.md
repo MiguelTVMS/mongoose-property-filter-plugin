@@ -57,5 +57,5 @@ clientSchema.plugin(expressPropertyFilter, opt);
 
 ## Version history.
 
-### 1.0.0
- - First functional version of this plugin.
+### 1.0.1
+ - First functional version of the module.
