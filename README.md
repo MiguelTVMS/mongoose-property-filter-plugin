@@ -59,11 +59,3 @@ const clientSchema = new Schema({
 const opt = { "hide" : "myCustomField" };
 clientSchema.plugin(mongoosePropertyFilter, opt);
 ```
-
-
-## Version history.
-
-### 1.0.1
- - First functional version of the module.
-### 1.1.0
- - Added basic testing.
