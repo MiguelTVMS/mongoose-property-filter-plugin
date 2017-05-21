@@ -1,10 +1,10 @@
-# express-property-filter-plugin
-Express plugin to easly remove properties from the schema without removing any data.
+# mongoose-property-filter-plugin
+Mongoose plugin to easly remove properties from the schema without removing any data.
 ## How to use it
 To use this module just add the reference to you javascript file.
 
 ```javascript
-const expressPropertyFilter = require('express-property-filter');
+const mongoosePropertyFilter = require('mongoose-property-filter');
 ```
 
 Then just add the plugin on the shcema app.
@@ -17,7 +17,7 @@ const clientSchema = new Schema({
     }
 });
 
-clientSchema.plugin(expressPropertyFilter);
+clientSchema.plugin(mongoosePropertyFilter);
 ```
 
 ## Configuring
@@ -51,7 +51,7 @@ const clientSchema = new Schema({
 
 // With this options the JSON version of this schema will be { "name" : "Wally" }
 const opt = { "hide" : "myCustomField" };
-clientSchema.plugin(expressPropertyFilter, opt);
+clientSchema.plugin(mongoosePropertyFilter, opt);
 ```
 
 
@@ -59,3 +59,6 @@ clientSchema.plugin(expressPropertyFilter, opt);
 
 ### 1.0.1
  - First functional version of the module.
+
+ ### 1.1.0
+ - Added basic testing.
