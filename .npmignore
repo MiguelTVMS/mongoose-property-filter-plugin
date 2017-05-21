@@ -7,6 +7,9 @@
 #This file
 .npmignore
 
+#Git files
+.git*
+
 #Typings for nodejs intellisense in Visual Studio Code
 typings*
 *.d.ts
