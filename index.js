@@ -22,37 +22,38 @@ function defaultOptions(options) {
     return options;
 }
 
-function filter(doc, ret, opt, transformOptions) {
+function filter(doc, ret, opt) {
 
-    if (transformOptions.hide instanceof RegExp) {
+    if (opt.hide instanceof RegExp) {
         const props = Object.keys(ret);
         props.forEach(prop => {
-            if (transformOptions.hide.test(prop)) delete ret[prop];
+            if (opt.hide.test(prop)) delete ret[prop];
         });
         return;
     }
 
-    if (!Array.isArray(transformOptions.hide)) {
-        transformOptions.hide = transformOptions.hide.split(' ');
+    if (!Array.isArray(opt.hide)) {
+        opt.hide = opt.hide.split(' ');
         return;
     }
 
-    if (transformOptions.hide) {
-        transformOptions.hide.forEach(prop => delete ret[prop]);
+    if (opt.hide) {
+        opt.hide.forEach(prop => delete ret[prop]);
         return;
     }
 };
 
 var removeFields = function (schema, options) {
 
-    transformOptions = defaultOptions(options);
+    const transformOptions = defaultOptions(options);
 
     if (transformOptions.applyToJSON)
         schema.options.toJSON = {
             _id: transformOptions._id,
             versionKey: transformOptions.versionKey,
             virtuals: transformOptions.showVirtuals,
-            transform: (doc, ret, opt) => filter(doc, ret, opt, transformOptions)
+            hide: transformOptions.hide,
+            transform: (doc, ret, opt) => filter(doc, ret, opt)
         };
 
     if (transformOptions.applyToObject)
@@ -60,7 +61,8 @@ var removeFields = function (schema, options) {
             _id: transformOptions._id,
             versionKey: transformOptions.versionKey,
             virtuals: transformOptions.showVirtuals,
-            transform: (doc, ret, opt) => filter(doc, ret, opt, transformOptions)
+            hide: transformOptions.hide,
+            transform: (doc, ret, opt) => filter(doc, ret, opt)
         };
 };
 
