@@ -1,11 +1,6 @@
 # mongoose-property-filter-plugin
 Mongoose plugin to easly remove properties from the schema without removing any data.
 
-## Status status
-
-| master | develop | version |
-|:---:|:---:|:---:|
-|[![Build Status](https://travis-ci.org/jmtvms/mongoose-property-filter-plugin.svg?branch=master)](https://travis-ci.org/jmtvms/mongoose-property-filter-plugin)|[![Build Status](https://travis-ci.org/jmtvms/mongoose-property-filter-plugin.svg?branch=develop)](https://travis-ci.org/jmtvms/mongoose-property-filter-plugin)|[![npm version](https://badge.fury.io/js/mongoose-property-filter-plugin.svg)](https://badge.fury.io/js/mongoose-property-filter-plugin)|
 ## How to use it
 To use this module just add the reference to you javascript file.
 
