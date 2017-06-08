@@ -4,7 +4,7 @@
     "description": "Mongoose plugin to easily remove desired properties from the the schema object.",
     "main": "index.js",
     "scripts": {
-        "test": "mocha"
+        "test": "mocha --timeout 120000"
     },
     "author": "João Miguel",
     "license": "GPL-3.0",
