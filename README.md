@@ -1,4 +1,7 @@
 # mongoose-property-filter-plugin
+[![npm](https://img.shields.io/npm/v/mongoose-property-filter-plugin.svg?style=flat-square)](https://www.npmjs.com/package/mongoose-property-filter-plugin)
+[![Travis](https://img.shields.io/travis/jmtvms/mongoose-property-filter-plugin.svg?style=flat-square)](https://travis-ci.org/jmtvms/mongoose-property-filter-plugin)
+[![npm](https://img.shields.io/npm/dt/mongoose-property-filter-plugin.svg?style=flat-square)](https://www.npmjs.com/package/mongoose-property-filter-plugin)  
 Mongoose plugin to easly remove properties from the schema without removing any data.
 
 ## How to use it
