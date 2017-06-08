@@ -1,34 +1,86 @@
+const debuglog = require('util').debuglog('mongoose-property-filter-plugin');
+
 function defaultOptions(options) {
     options = options || {};
 
-    if (!options.hide)
+    if (!options.hide) {
         options.hide = /(_|deleted|created|updated).*/;
+        debuglog('options.hide not set, using default: %s', options.hide);
+    } else {
+        debuglog('Using passed options.hide: %s', options.hide);
+    }
 
-    if (!options.showVirtuals)
+    if (!options.showVirtuals) {
         options.showVirtuals = false;
+        debuglog('options.showVirtuals not set, using default: %s', options.showVirtuals);
+    } else {
+        debuglog('Using passed options.showVirtuals: %s', options.showVirtuals);
+    }
 
-    if (!options.versionKey)
+    if (!options.versionKey) {
         options.versionKey = false;
+        debuglog('options.versionKey not set, using default: %s', options.versionKey);
+    } else {
+        debuglog('Using passed options.versionKey: %s', options.versionKey);
+    }
 
-    if (!options._id)
+    if (!options._id) {
         options._id = false;
+        debuglog('options._id not set, using default: %s', options._id);
+    } else {
+        debuglog('Using passed options._id: %s', options._id);
+    }
 
-    if (!options.applyToJSON)
+    if (!options.applyToJSON) {
         options.applyToJSON = true;
+        debuglog('options.applyToJSON not set, using default: %s', options.applyToJSON);
+    } else {
+        debuglog('Using passed options.applyToJSON: %s', options.applyToJSON);
+    }
 
-    if (!options.applyToObject)
+    if (!options.applyToObject) {
         options.applyToObject = false;
+        debuglog('options.applyToObject not set, using default: %s', options.applyToObject);
+    } else {
+        debuglog('Using passed options.applyToObject: %s', options.applyToObject);
+    }
+
+    if (typeof options.allLevels === 'undefined') {
+        options.allLevels = true;
+        debuglog('options.allLevels not set, using default: %s', options.allLevels);
+    } else {
+        debuglog('Using passed options.allLevels: %s', options.allLevels);
+    }
 
     return options;
+}
+
+function removeByRegex(obj, regex, allLevels) {
+    debuglog('Removing properties by the regex "%s" from the object: %j', regex, obj);
+    const props = Object.keys(obj);
+    props.forEach((prop) => {
+        if (regex.test(prop)) delete obj[prop];
+        const propType = typeof (obj[prop]);
+        if (propType === 'object' && allLevels) removeByRegex(obj[prop], regex, allLevels);
+    });
+}
+
+function removeByName(obj, names, allLevels) {
+    debuglog('Removing properties by the names "%s" from the object: %j', names.join(), obj);
+    names.forEach(prop => delete obj[prop]);
+    if (allLevels) {
+        const props = Object.keys(obj);
+        props.forEach((prop) => {
+            const propType = typeof (obj[prop]);
+            if (propType === 'object') removeByName(obj[prop], names, allLevels);
+        });
+    }
 }
 
 function filter(doc, ret, opt) {
 
     if (opt.hide instanceof RegExp) {
-        const props = Object.keys(ret);
-        props.forEach(prop => {
-            if (opt.hide.test(prop)) delete ret[prop];
-        });
+        removeByRegex(ret, opt.hide, opt.allLevels);
         return;
     }
 
@@ -38,32 +90,38 @@ function filter(doc, ret, opt) {
     }
 
     if (opt.hide) {
-        opt.hide.forEach(prop => delete ret[prop]);
-        return;
+        removeByName(ret, opt.hide, opt.allLevels);
     }
-};
+}
 
-var removeFields = function (schema, options) {
+const removeFields = function (schema, options) {
 
     const transformOptions = defaultOptions(options);
+    debuglog('Using with the following options: %j', options);
 
-    if (transformOptions.applyToJSON)
+    if (transformOptions.applyToJSON) {
         schema.options.toJSON = {
             _id: transformOptions._id,
             versionKey: transformOptions.versionKey,
             virtuals: transformOptions.showVirtuals,
             hide: transformOptions.hide,
+            allLevels: transformOptions.allLevels,
             transform: (doc, ret, opt) => filter(doc, ret, opt)
         };
+        debuglog('Configuring the toJSON method with options: %j', schema.options.toJSON);
+    }
 
-    if (transformOptions.applyToObject)
+    if (transformOptions.applyToObject) {
         schema.options.toObject = {
             _id: transformOptions._id,
             versionKey: transformOptions.versionKey,
             virtuals: transformOptions.showVirtuals,
             hide: transformOptions.hide,
+            allLevels: transformOptions.allLevels,
             transform: (doc, ret, opt) => filter(doc, ret, opt)
         };
+        debuglog('Configuring the applyToObject method with options: %j', schema.options.applyToObject);
+    }
 };
 
-module.exports = exports = removeFields;
+module.exports = removeFields;

@@ -33,6 +33,7 @@ You can configure the toJSON and toObject methods output properties filter from 
 | **showVirtuals**  |            Bool           |               true              | Force virtual fields to be shown.                                                                                                                          |
 | **versionKey**    |            Bool           |              false              | Show the version key from the schema.                                                                                                                      |
 | **_id**           |            Bool           |              false              | Show the _id field from the schema.                                                                                                                        |
+| **allLevels**     |            Bool           |              true               | All nestes schemas are filtered too.                                                                                                                        |
 | **applyToJSON**   |            Bool           |               true              | Should the filters be applied on the toJSON method from the schema.                                                                                        |
 | **applyToObject** |            Bool           |              false              | Should the filters be applied on the toObject method from the schema.                                                                                      |
 ### Using the options on your schema
