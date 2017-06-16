@@ -1,6 +1,6 @@
 {
     "name": "mongoose-property-filter-plugin",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "description": "Mongoose plugin to easily remove desired properties from the the schema object.",
     "main": "index.js",
     "scripts": {
@@ -26,15 +26,18 @@
     ],
     "devDependencies": {
         "bluebird": "^3.5.0",
-        "cross-env": "^5.0.0",
-        "eslint": "^3.19.0",
+        "chai": "^4.0.2",
+        "cross-env": "^5.0.1",
+        "eslint": "^4.0.0",
         "eslint-config-airbnb": "^15.0.1",
         "eslint-plugin-import": "^2.3.0",
         "eslint-plugin-jsx-a11y": "^5.0.3",
-        "eslint-plugin-react": "^7.0.1",
+        "eslint-plugin-react": "^7.1.0",
         "mocha": "^3.4.2",
         "mockgoose": "^7.3.3",
-        "mongoose": "^4.10.0",
-        "nodemon": "^1.11.0"
-    }
+        "mongoose": "^4.10.6",
+        "nodemon": "^1.11.0",
+        "rewire": "^2.5.2"
+    },
+    "dependencies": {}
 }

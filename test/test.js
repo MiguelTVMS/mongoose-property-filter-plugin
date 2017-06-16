@@ -1,6 +1,9 @@
 /* global describe it before */
-const assert = require('assert');
-const util = require('util')
+const rewire = require('rewire');
+const rwIndex = rewire('../index');
+const expect = require('chai').expect;
+const util = require('util');
+const debuglog = util.debuglog('mongoose-property-filter-plugin');
 const bluebird = require('bluebird');
 const mongoose = require('mongoose');
 mongoose.Promise = bluebird;
@@ -14,6 +17,109 @@ before((done) => {
     mockgoose.prepareStorage().then(() => {
         mongoose.connect('mongodb://example.com/mockdb', (err) => {
             done(err);
+        });
+    });
+});
+
+describe('Stand alone', () => {
+    describe('Private functions', () => {
+        it('removeByRegex should handle undefined or null objects.', () => {
+            const removeByRegex = rwIndex.__get__('removeByRegex');
+
+            const undefObj = undefined;
+
+            removeByRegex(undefObj, /(_|deleted|created|updated).*/, true);
+
+        });
+        it('removeByName should handle undefined or null objects.', () => {
+            const removeByName = rwIndex.__get__('removeByName');
+
+            const undefObj = undefined;
+
+            removeByName(undefObj, ['_id', 'deleted'], true);
+        });
+        it('defaultOptions should set the expexted default options.', () => {
+
+            const options = {};
+
+            const defaultOptions = rwIndex.__get__('defaultOptions');
+            defaultOptions(options);
+
+            expect(options)
+                .to.have.property('hide').to.be.an('RegExp');
+
+            expect(options)
+                .to.own.include({
+                    //hide: /(_|deleted|created|updated).*/, //Regex is not supported.
+                    showVirtuals: false,
+                    versionKey: false,
+                    _id: false,
+                    applyToJSON: true,
+                    applyToObject: false,
+                    allLevels: true
+                });
+
+        });
+        it('filter should work with a regex.', () => {
+            const obj = {
+                _shouldHide: 'String',
+                shouldAppear: 'String',
+                deleted: false
+            };
+
+            const options = {
+                hide: /(_|deleted|created|updated).*/
+            };
+            const defaultOptions = rwIndex.__get__('defaultOptions');
+            defaultOptions(options);
+            const filter = rwIndex.__get__('filter');
+
+            filter(null, obj, options);
+
+            expect(obj)
+                .to.have.property('shouldAppear')
+                .but.not.to.have.all.keys('_shouldHide', 'deleted');
+
+        });
+        it('filter should work with a array of strings.', () => {
+            const obj = {
+                _shouldHide: 'String',
+                shouldAppear: 'String',
+                deleted: false
+            };
+
+            const options = {
+                hide: ['_shouldHide', 'deleted']
+            };
+            const defaultOptions = rwIndex.__get__('defaultOptions');
+            defaultOptions(options);
+            const filter = rwIndex.__get__('filter');
+
+            filter(null, obj, options);
+
+            expect(obj)
+                .to.have.property('shouldAppear')
+                .but.not.to.have.all.keys('_shouldHide', 'deleted');
+        });
+        it('filter should work with a string separated by spaces', () => {
+            const obj = {
+                _shouldHide: 'String',
+                shouldAppear: 'String',
+                deleted: false
+            };
+
+            const options = {
+                hide: '_shouldHide deleted'
+            };
+            const defaultOptions = rwIndex.__get__('defaultOptions');
+            defaultOptions(options);
+            const filter = rwIndex.__get__('filter');
+
+            filter(null, obj, options);
+
+            expect(obj)
+                .to.have.property('shouldAppear')
+                .but.not.to.have.all.keys('_shouldHide', 'deleted');
         });
     });
 });
@@ -34,8 +140,9 @@ describe('Schema', () => {
                 return schema.save().then((doc) => {
                     const jsonDoc = doc.toJSON();
 
-                    assert.equal(jsonDoc.hasOwnProperty('_shouldHide'), false, 'The property _shouldHide was not removed.');
-                    assert.equal(jsonDoc.hasOwnProperty('deleted'), false, 'The property deleted was not removed.');
+                    expect(jsonDoc)
+                        .to.have.property('shouldAppear')
+                        .but.not.to.have.all.keys('_shouldHide', 'deleted');
                 });
             });
         });
@@ -54,22 +161,24 @@ describe('Schema', () => {
                     deleted: false
                 };
 
-                //console.log(util.format('Object: %j', obj));
+                debuglog('Object: %j', obj);
 
                 const schema = new MultiLevel(obj);
 
-                //console.log(util.format('Schema: %j', schema));
+                debuglog('Schema: %j', schema);
 
                 return schema.save().then((doc) => {
                     const jsonDoc = doc.toJSON();
 
-                    //console.log(util.format('JSON: %j', jsonDoc));
+                    debuglog('JSON: %j', jsonDoc);
 
-                    assert.equal(jsonDoc.hasOwnProperty('_shouldHide'), false, 'The property _shouldHide was not removed.');
-                    assert.equal(jsonDoc.hasOwnProperty('deleted'), false, 'The property deleted was not removed.');
+                    expect(jsonDoc)
+                        .to.have.property('shouldAppear')
+                        .but.not.to.have.all.keys('_shouldHide', 'deleted');
 
-                    assert.equal(jsonDoc.sub.hasOwnProperty('_shouldHide'), false, 'The property _shouldHide was not removed from the sub object.');
-                    assert.equal(jsonDoc.sub.hasOwnProperty('deleted'), false, 'The property deleted was not removed from the sub object.');
+                    expect(jsonDoc.sub)
+                        .to.have.property('shouldAppear')
+                        .but.not.to.have.all.keys('_shouldHide', 'deleted');
                 });
             });
         });
@@ -95,13 +204,14 @@ describe('Schema', () => {
                 return schema.save().then((doc) => {
                     const jsonDoc = doc.toJSON();
 
-                    //console.log(util.format('JSON: %j', jsonDoc));
+                    debuglog('JSON: %j', jsonDoc);
 
-                    assert.equal(jsonDoc.hasOwnProperty('_shouldHide'), false, 'The property _shouldHide was not removed.');
-                    assert.equal(jsonDoc.hasOwnProperty('deleted'), false, 'The property deleted was not removed.');
+                    expect(jsonDoc)
+                        .to.have.property('shouldAppear')
+                        .but.not.to.have.all.keys('_shouldHide', 'deleted');
 
-                    assert.equal(jsonDoc.sub.hasOwnProperty('_shouldHide'), true, 'The property _shouldHide was removed from the sub object.');
-                    assert.equal(jsonDoc.sub.hasOwnProperty('deleted'), true, 'The property deleted was removed from the sub object.');
+                    expect(jsonDoc.sub)
+                        .to.have.all.keys('_id', '_shouldHide', 'shouldAppear', 'deleted');
                 });
             });
         });

@@ -57,6 +57,7 @@ function defaultOptions(options) {
 
 function removeByRegex(obj, regex, allLevels) {
     debuglog('Removing properties by the regex "%s" from the object: %j', regex, obj);
+    if (typeof obj === 'undefined' || obj === null) return;
     const props = Object.keys(obj);
     props.forEach((prop) => {
         if (regex.test(prop)) delete obj[prop];
@@ -67,6 +68,7 @@ function removeByRegex(obj, regex, allLevels) {
 
 function removeByName(obj, names, allLevels) {
     debuglog('Removing properties by the names "%s" from the object: %j', names.join(), obj);
+    if (typeof obj === 'undefined' || obj === null) return;
     names.forEach(prop => delete obj[prop]);
     if (allLevels) {
         const props = Object.keys(obj);
@@ -94,7 +96,7 @@ function filter(doc, ret, opt) {
     }
 }
 
-const removeFields = function (schema, options) {
+const propertyFilter = function (schema, options) {
 
     const transformOptions = defaultOptions(options);
     debuglog('Using with the following options: %j', options);
@@ -124,4 +126,4 @@ const removeFields = function (schema, options) {
     }
 };
 
-module.exports = removeFields;
+module.exports = propertyFilter;
