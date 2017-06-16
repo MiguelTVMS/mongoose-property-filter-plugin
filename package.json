@@ -3,6 +3,10 @@
     "version": "1.5.1",
     "description": "Mongoose plugin to easily remove desired properties from the the schema object.",
     "main": "index.js",
+    "engines": {
+        "node": ">=6" 
+    },
+    "engineStrict": true,
     "scripts": {
         "test": "mocha --timeout 120000"
     },
