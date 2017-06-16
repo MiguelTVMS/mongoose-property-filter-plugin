@@ -17,6 +17,13 @@ function defaultOptions(options) {
         debuglog('Using passed options.showVirtuals: %s', options.showVirtuals);
     }
 
+    if (!options.showGetters) {
+        options.showGetters = false;
+        debuglog('options.showGetters not set, using default: %s', options.showVirtuals);
+    } else {
+        debuglog('Using passed options.showGetters: %s', options.showVirtuals);
+    }
+
     if (!options.versionKey) {
         options.versionKey = false;
         debuglog('options.versionKey not set, using default: %s', options.versionKey);
@@ -106,6 +113,7 @@ const propertyFilter = function (schema, options) {
             _id: transformOptions._id,
             versionKey: transformOptions.versionKey,
             virtuals: transformOptions.showVirtuals,
+            getters: transformOptions.showGetters,
             hide: transformOptions.hide,
             allLevels: transformOptions.allLevels,
             transform: (doc, ret, opt) => filter(doc, ret, opt)
@@ -118,6 +126,7 @@ const propertyFilter = function (schema, options) {
             _id: transformOptions._id,
             versionKey: transformOptions.versionKey,
             virtuals: transformOptions.showVirtuals,
+            getters: transformOptions.showGetters,
             hide: transformOptions.hide,
             allLevels: transformOptions.allLevels,
             transform: (doc, ret, opt) => filter(doc, ret, opt)
