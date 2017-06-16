@@ -52,6 +52,7 @@ describe('Stand alone', () => {
                 .to.own.include({
                     //hide: /(_|deleted|created|updated).*/, //Regex is not supported.
                     showVirtuals: false,
+                    showGetters: false,
                     versionKey: false,
                     _id: false,
                     applyToJSON: true,
